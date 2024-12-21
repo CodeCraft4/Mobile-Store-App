@@ -1,117 +1,116 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+  DiscoverScreen,
+  Home,
+  PaymentDetailsScreens,
+  Scanners,
+  SignUp,
+} from '@screens';
+import {enableScreens} from 'react-native-screens';
+import {Discover, Favorite, HomeIcon, Setting, Shop} from '@assets';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+enableScreens();
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+const Tab = createBottomTabNavigator();
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
+const App = () => {
+  const TabIcon = ({focused, children}) => {
+    return (
+      <View
         style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
+          styles.tabIcon,
+          {backgroundColor: focused ? 'black' : 'transparent'},
         ]}>
         {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+      </View>
+    );
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            position: 'absolute',
+            height: 65,
+            backgroundColor: 'white',
+          },
+          headerShown: false,
+        }}>
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabIcon focused={focused}>
+                <HomeIcon />
+              </TabIcon>
+            ),
+            tabBarLabel: () => null,
+          }}
+        />
+        <Tab.Screen
+          name="Explore"
+          component={Scanners}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabIcon focused={focused}>
+                <Shop />
+              </TabIcon>
+            ),
+            tabBarLabel: () => null,
+          }}
+        />
+        <Tab.Screen
+          name="Discover"
+          component={DiscoverScreen}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabIcon focused={focused}>
+                <Discover />
+              </TabIcon>
+            ),
+            tabBarLabel: () => null,
+          }}
+        />
+        <Tab.Screen
+          name="Favourite"
+          component={SignUp}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabIcon focused={focused}>
+                <Favorite />
+              </TabIcon>
+            ),
+            tabBarLabel: () => null,
+          }}
+        />
+        <Tab.Screen
+          name="Setting"
+          component={PaymentDetailsScreens}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabIcon focused={focused}>
+                <Setting />
+              </TabIcon>
+            ),
+            tabBarLabel: () => null,
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  tabIcon: {
+    borderRadius: 5,
+    padding: 8,
   },
 });
 
